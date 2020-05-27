@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cityapp-deployment
+  labels:
+    app: cityapp
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: cityapp
+    spec:
+      containers:
+        - name: esp
+          image: gcr.io/endpoints-release/endpoints-runtime:1
+          args: [
+            "--http_port=8081",
+            "--backend=127.0.0.1:8080",
+            "--service=city-api.endpoints.YOUR_PROJECT_ID.cloud.goog",
+            "--rollout_strategy=managed",
+          ]
+          ports:
+            - containerPort: 8081
+        - name: cityapp-service
+          image: CITY_APP_IMAGE_PATH
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: cityapp

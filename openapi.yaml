@@ -1,0 +1,43 @@
+swagger: "2.0"
+info:
+  title: City App
+  description: City App
+  version: 1.0.0
+host: city-api.endpoints.YOUR_PROJECT_ID.cloud.goog
+consumes:
+  - application/json
+produces:
+  - application/json
+schemes:
+  - http
+security:
+  - firebase
+paths:
+  /cities:
+    get:
+      description: Returns all cities
+      operationId: getCities
+      security: []
+      responses:
+        '200':
+          description: A list of cities.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/city'
+definitions:
+  city:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+securityDefinitions:
+  firebase:
+    authorizationUrl: ""
+    flow: "implicit"
+    type: "oauth2"
+    x-google-issuer: "https://securetoken.google.com/YOUR_PROJECT_ID"
+    x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+    x-google-audiences: "YOUR_PROJECT_ID"
